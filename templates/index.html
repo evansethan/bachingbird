@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Generator</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/html-midi-player@1.5.0/dist/midi-player.min.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+</head>
+<body>
+
+    <main class="container">
+        <div class="logo-placeholder">
+            <div class="logo-box">LOGO</div>
+        </div>
+
+        <h1>AI Song Generator</h1>
+
+        <div class="visualizer-container">
+            <midi-visualizer type="piano-roll" id="myVisualizer"></midi-visualizer>
+        </div>
+
+        <midi-player
+            src=""
+            sound-font visualizer="#myVisualizer" 
+            id="myPlayer">
+        </midi-player>
+
+        <div class="controls">
+            <button id="generateBtn" class="btn primary">Generate New Song</button>
+            <a id="downloadBtn" class="btn secondary disabled">Download MIDI</a>
+        </div>
+        
+        <p id="statusText" class="status"></p>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
