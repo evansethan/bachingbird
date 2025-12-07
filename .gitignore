@@ -1,2 +1,4 @@
 venv
 model.pkl
+app_keys.py
+processed_midi.pkl
