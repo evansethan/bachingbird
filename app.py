@@ -8,24 +8,20 @@ import os
 import base64
 from io import BytesIO
 import tempfile
-
-# Import your existing helper class
 from helpers import DualMusicLSTM
 
-m1 = "models/old"
-m2 = "models/composer"
 
-# --- CONFIGURATION (LOCKED TO TRAINING) ---
-MODEL_FILE = f"{m1}/model.pkl"
-CACHE_FILE = f"{m1}/processed_midi.pkl"
-LOGO_FILE = "unnamed.jpg"
+# --- CONFIGURATION ---
+MODEL_FILE = f"data/model.pkl"
+CACHE_FILE = f"data/processed_midi.pkl"
+LOGO_FILE = "logo.jpg"
 
 # Fixed Generation Parameters
 SEQUENCE_LENGTH = 128
 TEMPERATURE_PITCH = 1.0 
 TEMPERATURE_DUR = 1.1 
 TOP_P = 0.9 
-NUM_NOTES = 32
+NUM_NOTES = 64
 
 # Page Configuration
 st.set_page_config(
@@ -149,14 +145,14 @@ def generate_midi(model, data, device, num_notes=NUM_NOTES):
 
 with st.sidebar:
     if os.path.exists(LOGO_FILE):
-        st.image(LOGO_FILE, use_container_width=True)
+        st.image(LOGO_FILE, width='stretch')
 
 model, data, device = load_system()
 
 if model is None:
     st.error("Could not load model. Please check file paths.")
 else:
-    if st.button("✨ Generate New Chorale", type="primary", use_container_width=True):
+    if st.button("✨ Generate New Chorale", type="primary", width='stretch'):
         with st.spinner("Composing..."):
             midi_io = generate_midi(model, data, device, NUM_NOTES)
             st.session_state['current_midi'] = midi_io
