@@ -152,7 +152,7 @@ model, data, device = load_system()
 if model is None:
     st.error("Could not load model. Please check file paths.")
 else:
-    if st.button("✨ Generate New Chorale", type="primary", width='stretch'):
+    if st.button("Generate New Chorale", type="primary", width='stretch'):
         with st.spinner("Composing..."):
             midi_io = generate_midi(model, data, device, NUM_NOTES)
             st.session_state['current_midi'] = midi_io
@@ -181,7 +181,7 @@ else:
         st.components.v1.html(html_code, height=350)
 
         st.download_button(
-            label="⬇️ Download MIDI",
+            label="Download MIDI",
             data=midi_data,
             file_name=f"bachingbird_output.mid",
             mime="audio/midi"
