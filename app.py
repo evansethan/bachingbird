@@ -12,16 +12,20 @@ import tempfile
 # Import your existing helper class
 from helpers import DualMusicLSTM
 
+m1 = "models/old"
+m2 = "models/composer"
+
 # --- CONFIGURATION (LOCKED TO TRAINING) ---
-MODEL_FILE = "model.pkl"
-CACHE_FILE = "processed_midi.pkl"
+MODEL_FILE = f"{m1}/model.pkl"
+CACHE_FILE = f"{m1}/processed_midi.pkl"
 LOGO_FILE = "unnamed.jpg"
 
 # Fixed Generation Parameters
-SEQUENCE_LENGTH = 64
-TEMPERATURE_PITCH = 1.0  
-TEMPERATURE_DUR = 1.1    
-TOP_P = 0.9              
+SEQUENCE_LENGTH = 128
+TEMPERATURE_PITCH = 1.0 
+TEMPERATURE_DUR = 1.1 
+TOP_P = 0.9 
+NUM_NOTES = 32
 
 # Page Configuration
 st.set_page_config(
@@ -66,7 +70,7 @@ def nucleus_sample(prediction, top_p):
     probs = probs / probs.sum()
     return torch.multinomial(probs, 1).item()
 
-def generate_midi(model, data, device, num_notes=64):
+def generate_midi(model, data, device, num_notes=NUM_NOTES):
     int_to_pitch = data['int_to_pitch']
     int_to_dur = data['int_to_dur']
     input_pitches = data['pitches']
@@ -154,19 +158,12 @@ if model is None:
 else:
     if st.button("✨ Generate New Chorale", type="primary", use_container_width=True):
         with st.spinner("Composing..."):
-            midi_io = generate_midi(model, data, device, num_notes=SEQUENCE_LENGTH)
+            midi_io = generate_midi(model, data, device, NUM_NOTES)
             st.session_state['current_midi'] = midi_io
             st.rerun()
 
     if 'current_midi' in st.session_state:
         midi_data = st.session_state['current_midi'].getvalue()
-        
-        st.download_button(
-            label="⬇️ Download MIDI",
-            data=midi_data,
-            file_name=f"bachingbird_output.mid",
-            mime="audio/midi"
-        )
         
         b64_midi = base64.b64encode(midi_data).decode()
         midi_url = f"data:audio/midi;base64,{b64_midi}"
@@ -186,3 +183,10 @@ else:
         </div>
         """
         st.components.v1.html(html_code, height=350)
+
+        st.download_button(
+            label="⬇️ Download MIDI",
+            data=midi_data,
+            file_name=f"bachingbird_output.mid",
+            mime="audio/midi"
+        )
