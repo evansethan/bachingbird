@@ -21,7 +21,7 @@ SEQUENCE_LENGTH = 128
 TEMPERATURE_PITCH = 1.0 
 TEMPERATURE_DUR = 1.1 
 TOP_P = 0.9 
-NUM_NOTES = 64
+NUM_NOTES = 48
 
 # Page Configuration
 st.set_page_config(
